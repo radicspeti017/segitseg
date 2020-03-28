@@ -1,0 +1,128 @@
+<html>
+  <head>
+    <link rel="icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/static/css/app.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        $( document ).ready(function() {
+          $("#lista").html("")
+          $.ajax({
+              url: "/rest/segitsegKereses", success: function (result) {
+                $.each(result, function(key, value){
+                  $("#lista").append("<div class=\"card\" style=\"width: 18rem;\"><div class=\"card-body\"><h5 class=\"card-title\">" + value['name'] + "</h5><p class=\"card-text\">segítségnyújtásra <b>" + value['count'] + "</b> darab segítség vár</p><button onclick=\"mutasdASzamot('" + value['helpType'] + "')\"' class=\"btn btn-primary\">Segítek!</a></div></div>");
+                });
+                if (result === undefined || result.length == 0) {
+                  $('#nemKernekSegitseget').css('display','block');
+                }
+
+              }
+          });
+        });
+
+        function mutasdASzamot(helpType) {
+          //helpType = $('#helpTypes').val();
+
+          $('#phone').html("Telefonszám: betöltés folyamatban...");
+          $('#hivomDialog').modal()
+
+          //$('#mutasdASzamot').prop('disabled', true);
+          $.ajax({
+              url: "/rest/mutasdASzamot?helpType=" + helpType, success: function (result) {
+
+                $('#phone').html("Telefonszám: " + "<a href=\"tel:" + result["phone"] + "\">" + result["phone"] + "</a>");
+                $('#phoneUserId').val(result["id"]);
+
+              },
+              error: function (xhr, ajaxOptions, thrownError) {
+                alert("Valaki gyorsabb volt, válasszon egy másikat!");
+                window.location="/segitek"
+              }
+          });
+
+
+        }
+
+        function telefononFelhivtam(res) {
+          $.ajax({
+              url: "/rest/telefononFelhivtam?id=" + $('#phoneUserId').val() + "&result=" + res, success: function (result) {
+                if (res == "kellek") {
+                  window.location="/segitek"
+                } else if (res == "nemKellek") {
+                  window.location="/segitek"
+                  //ki kell szurni legkozelebb
+                } else if (res == "targytalan") {
+                  window.location="/segitek"
+                  //kereses ismet
+                }
+              }
+          });
+        }
+    </script>
+  </head>
+  <body>
+    {% include "header.html" ignore missing %}
+    <div>
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container info">
+          <div class="alert alert-success" role="alert" style="text-align: justify;">
+            Itt a segítségre várók jelennek meg a kiválasztott településen. Amikor rákattint egy dobozra
+            a rendszer kiválaszt egy segítségre szorulót, akinek az elérhetőségét megjeleníti. Ezután csak annyi a teendő,
+            hogy felhívja és a megbeszéltek alapján megnyomja a megfelelő gombot. Ugye milyen egyszerű? Mire vár, gyerünk segítsen
+            valakinek még most!
+          </div>
+          <div class="row" id="lista">
+          </div>
+
+          <div id="nemKernekSegitseget" style="display:none">
+            <h2>Jelenleg senki nem vár segítségre... nézzen vissza később</h2>
+          </div>
+
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade bd-example-modal-lg" id="hivomDialog" tabindex="-1" role="dialog" aria-labelledby="hivomDialog" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Segítségnyújtás eredménye:</h5>
+              </div>
+              <div class="modal-body">
+
+                <h1 id="phone"></h1>
+
+
+                <p>A lentebbi gombok közül válassza ki, hogy végződött a hívás.</p>
+
+                <div class="alert alert-success" role="alert">
+                  <b>Igen:</b> megbeszélték a részleteket, tud segíteni.
+                </div>
+                <div class="alert alert-info" role="alert">
+                  <b>Nem:</b> sajnos Ön nem tud segíteni, de maradjon a rendszerben, és ossza ki másik segítőnek.
+                </div>
+                <div class="alert alert-danger" role="alert">
+                  <b>Téves:</b> már nincs szüksége segítségre. Esetleg hibás volt a szám, vagy nem elérhető.
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button onclick="telefononFelhivtam('kellek')" class="btn btn-primary btn-block" data-dismiss="modal">Igen</button>
+                <br>
+                <button onclick="telefononFelhivtam('nemKellek')" class="btn btn-secondary btn-block" data-dismiss="modal">Nem</button>
+                <br>
+                <button onclick="telefononFelhivtam('targytalan')" class="btn btn-secondary btn-block" data-dismiss="modal">Téves</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    </div>
+    </div>
+<input type="hidden" id="phoneUserId"  value="">
+
+  </body>
+  <script src="../static/js/bootstrap.js"></script>
+  <script src="../static/js/holder.js"></script>
+  <script src="../static/js/popper.js"></script>
+</html>

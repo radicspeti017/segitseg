@@ -1,0 +1,43 @@
+<header>
+  <div class="collapse bg-dark" id="navbarHeader">
+	<div class="container">
+	  <div class="row">
+		<div class="col-sm-8 col-md-7 py-4">
+		  <p class="text-muted">„A legnagyobb sikereket akkor fogjuk elérni, amikor képessé válunk arra, hogy másokon segítsünk." - Charles Francis Haanel</p>
+		</div>
+		<div class="col-sm-4 offset-md-1 py-4">
+		  <ul class="list-unstyled">
+			<li><a href="https://www.facebook.com/Segitseginfo-111456710489491/" class="text-white">Facebook</a></li>
+			<li><a href="/kapcsolat" class="text-white">Hibát találtál? Jelentsd!</a></li>
+			<li><a href="/kapcsolat" class="text-white">Visszaélés bejelentése</a></li>
+			<li><a href="/aszf" class="text-white">ÁSZF</a></li>
+      <li><a href="/adatkezeles" class="text-white">Adatkezelés</a></li>
+
+      {% if current_user.is_authenticated == True %}
+      <li><a href="/editprofile" class="text-white">Felhasználó profil</a></li>
+      <li><a href="/logout" class="text-white">Kilépés!</a></li>
+      {% else %}
+      <li><a href="/login" class="text-white">Belépés önkénteseknek</a></li>
+      {% endif %}
+
+		  </ul>
+		</div>
+	  </div>
+	</div>
+  </div>
+  <div class="navbar navbar-dark bg-dark box-shadow">
+	<div class="container d-flex justify-content-between">
+	  <a href="./" class="navbar-brand d-flex align-items-center">
+    {% if current_user.is_authenticated == True %}
+		<strong>segitseg.info ({{current_user.name}})</strong>
+    {% else %}
+    <strong>segitseg.info</strong>
+    {% endif %}
+	  </a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
+		aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	  </button>
+	</div>
+  </div>
+</header>

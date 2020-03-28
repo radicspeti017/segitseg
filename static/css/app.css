@@ -1,0 +1,99 @@
+body {
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+
+.center {
+	margin: auto;
+	width: 100%;
+	padding: 10px;
+}
+
+.width-70 {
+	width: 70%;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.justify-text {
+	text-align: justify;
+}
+
+.btn {
+	margin: 5px;
+}
+
+.lightblue {
+	background: #6f9cf0;
+}
+
+.darkblue {
+	background: rgb(65, 68, 233);
+}
+
+.info {
+	text-align: center;
+	max-width: 40%;
+	margin: auto;
+}
+
+.container {
+	text-align: center;
+	margin: auto;
+}
+
+.jumbotron {
+    background-color: #e3e4e6;
+}
+
+.btn-back {
+	margin: 5px;
+}
+
+.logoutButton{
+    position:fixed;
+    right: 5px;
+	top: 5px;
+}
+
+.listElement {
+    margin: 10px;
+}
+
+h1 {
+	margin-bottom: 20px !important;
+}
+
+table {
+	border: none;
+	border-collapse: collapse;
+}
+
+table tr {
+    border-top: 1px solid #000;
+}
+
+table tr:first-child {
+    border-top: none;
+}
+
+.row > .col-md-6 > p {
+	text-align: left;
+}
+
+@media screen and (max-width: 992px) {
+	.info {
+		max-width: 100%;
+	}
+}
+
+@media screen and (min-width: 992px) {
+    .center {
+	    max-width: 50%;
+	}
+	
+	#elonyok > ul > li {
+		text-align: left;
+	}
+}

@@ -1,0 +1,92 @@
+</body>
+<script src="../static/js/bootstrap.js"></script>
+<script src="../static/js/holder.js"></script>
+<script src="../static/js/jquery-3.js"></script>
+<script src="../static/js/popper.js"></script>
+</html>
+
+
+
+<html>
+<head>
+  <link rel="icon" href="/static/images/favicon.ico">
+  <link rel="stylesheet" type="text/css" href="/static/css/app.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/album.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Segítség.info">
+</head>
+<body>
+  {% include "header.html" ignore missing %}
+
+  <div id="root">
+  <div class="jumbotron jumbotron-fluid">
+    <div class="center">
+      <div class="col-sm-12">
+        <div>
+          <h2>Kapcsolat</h2>
+
+          <p>Lépjen velünk kapcsolatba, hamarosan visszajelzünk!</p>
+
+          <form action='kapcsolat' method='POST'>
+            <div class="form-group">
+              <label>Email:</label>
+              <input type="email" name="email" class="form-control" value="{% if form %}{{form['email']}}{% endif %}" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;"/>
+            </div>
+            <div class="form-group">
+              <label>Név / szervezet / önkormányzat:</label>
+              <input type="text" name="name" class="form-control" value="{% if form %}{{form['name']}}{% endif %}"/>
+            </div>
+            <div class="form-group">
+              <label>Telefon:</label>
+              <input type="text" name="phone" class="form-control" value="{% if form %}{{form['phone']}}{% endif %}"/>
+            </div>
+            <div class="form-group">
+              <label>Kapcsolatfelvétel célja:</label>
+              <select id="type" name="type" class="form-control">
+                <option value="" disabled selected>Válasszon</option>
+                <option value="HIBA" name="HIBA">Hiba bejelentése</option>
+                <option value="FEJL" name="FEJL">Fejlesztési javaslat</option>
+                <option value="VISSZAELES" name="VISSZAELES">Visszaélés bejelentése</option>
+                <option value="ONKORM" name="ONKORM">Önkormányzat jelentkezése</option>
+                <option value="SZERVEZET" name="SZERVEZET">Szervezet jelentkezése</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Szöveges leírás:</label>
+              <textarea rows="4" name="text" class="form-control">{% if form %}{{form['text']}}{% endif %}</textarea>
+            </div>
+            {% if error is defined and error != None %}
+            <div class="alert alert-danger" role="alert">
+              <h4 class="alert-heading">Hiba történt!</h4>
+              <p>{{error}}</p>
+            </div>
+            {% endif %}
+
+            {% if success %}
+            <div class="alert alert-success" role="alert">
+              <h4 class="alert-heading">Hamarosan keressük!</h4>
+            </div>
+            {% endif %}
+
+            <div class="container">
+              <input type="submit" value="Kapcsolat" class="btn btn-primary"></input>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+</body>
+<script src="../static/js/bootstrap.js"></script>
+<script src="../static/js/holder.js"></script>
+<script src="../static/js/jquery-3.js"></script>
+<script src="../static/js/popper.js"></script>
+</html>

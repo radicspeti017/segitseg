@@ -1,0 +1,117 @@
+<html>
+<head>
+  <link rel="icon" href="/static/images/favicon.ico">
+  <link rel="stylesheet" type="text/css" href="/static/css/app.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/album.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Segítség.info">
+  <script>
+      $( document ).ready(function() {
+
+        $.ajax({
+            url: "/rest/helpTypes", success: function (result) {
+              $.each(result, function(key, name){
+                    //Use the Option() constructor to create a new HTMLOptionElement.
+                    var option = new Option(name["_id"], name["_id"]);
+                    //Convert the HTMLOptionElement into a JQuery object that can be used with the append method.
+                    $(option).html(name["name"]);
+                    //Append the option to our Select element.
+                    $("#helpTypes").append(option);
+                });
+
+                {% if form and form['helpTypes']%}
+        					$('#helpTypes').val('{{form['helpTypes']}}');
+        				{% endif %}
+
+            }
+        });
+
+
+
+      });
+  </script>
+  <style type="text/css">
+    .jumbotron {
+      background-color: #e3e4e6;
+    }
+
+    .center {
+      margin: auto;
+      width: 100%;
+      padding: 10px;
+    }
+
+    .btn-back {
+      margin: 5px;
+    }
+
+    @media screen and (min-width: 992px) {
+      .center {
+        max-width: 50%;
+      }
+    }
+  </style>
+</head>
+<body>
+  {% include "header.html" ignore missing %}
+
+<div class="jumbotron">
+  <h2 style="text-align: center;">Az alábbiakban kérném a segítséget</h2>
+  <div class="center">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <form action='segitsetek' method='POST'>
+          <div class="form-group">
+            <label for="helpTypes">Miben akarok segítséget kérni:</label>
+            <select id="helpTypes" name="helpTypes" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label for="cities">Város:</label>
+            <select id="cities" name="cities" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <p>Önkormányzati segítségkérés esetén a telefonszám nem kötelező!</p>
+            <label for="phone">Telefonszámom (+36):</label>
+            <input type='text' name='phone' id='phone' value="{% if form %}{{form['phone']}}{% endif %}" class="form-control" />
+          </div>
+
+          {% if error is defined and error != None %}
+          <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Hiba történt!</h4>
+            <p>{{error}}</p>
+          </div>
+          {% endif %}
+
+          <button class="btn btn-success" type="submit">Segítséget kérek!</button>
+        <form>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+<script>
+var cities = ["Budapest I. kerülete","Budapest II. kerülete","Budapest III. kerülete","Budapest IV. kerülete","Budapest V. kerülete","Budapest VI. kerülete","Budapest VII. kerülete","Budapest VIII. kerülete","Budapest IX. kerülete","Budapest X. kerülete","Budapest XI. kerülete","Budapest XII. kerülete","Budapest XIII. kerülete","Budapest XIV. kerülete","Budapest XV. kerülete","Budapest XVI. kerülete","Budapest XVII. kerülete","Budapest XVIII. kerülete","Budapest XIX. kerülete","Budapest XX. kerülete","Budapest XXI. kerülete", "Budapest XXII. kerülete", "Budapest XXIII. kerülete", "Aba", "Abádszalók", "Abaújszántó", "Abony", "Ács", "Adony", "Ajak", "Ajka", "Albertirsa", "Alsózsolca", "Aszód", "Bábolna", "Bácsalmás", "Badacsonytomaj", "Baja", "Baktalórántháza", "Balassagyarmat", "Balatonalmádi", "Balatonboglár", "Balatonföldvár", "Balatonfüred", "Balatonfűzfő", "Balatonkenese", "Balatonlelle", "Balkány", "Balmazújváros", "Barcs", "Bátaszék", "Bátonyterenye", "Battonya", "Békés", "Békéscsaba", "Bélapátfalva", "Beled", "Berettyóújfalu", "Berhida", "Besenyszög", "Biatorbágy", "Bicske", "Biharkeresztes", "Bodajk", "Bóly", "Bonyhád", "Borsodnádasd", "Budakalász", "Budakeszi", "Budaörs", "Bük", "Cegléd", "Celldömölk", "Cigánd", "Csákvár", "Csanádpalota", "Csenger", "Csepreg", "Csongrád", "Csorna", "Csorvás", "Csurgó", "Dabas", "Debrecen", "Demecser", "Derecske", "Dévaványa", "Devecser", "Diósd", "Dombóvár", "Dombrád", "Dorog", "Dunaföldvár", "Dunaharaszti", "Dunakeszi", "Dunaújváros", "Dunavarsány", "Dunavecse", "Edelény", "Eger", "Elek", "Emőd", "Encs", "Enying", "Ercsi", "Érd", "Esztergom", "Fegyvernek", "Fehérgyarmat", "Felsőzsolca", "Fertőd", "Fertőszentmiklós", "Fonyód", "Fót", "Füzesabony", "Füzesgyarmat", "Gárdony", "Göd", "Gödöllő", "Gönc", "Gyál", "Gyomaendrőd", "Gyömrő", "Gyöngyös", "Gyöngyöspata", "Gyönk", "Győr", "Gyula", "Hajdúböszörmény", "Hajdúdorog", "Hajdúhadház", "Hajdúnánás", "Hajdúsámson", "Hajdúszoboszló", "Hajós", "Halásztelek", "Harkány", "Hatvan", "Herend", "Heves", "Hévíz", "Hódmezővásárhely", "Ibrány", "Igal", "Isaszeg", "Izsák", "Jánoshalma", "Jánosháza", "Jánossomorja", "Jászapáti", "Jászárokszállás", "Jászberény", "Jászfényszaru", "Jászkisér", "Kaba", "Kadarkút", "Kalocsa", "Kaposvár", "Kapuvár", "Karcag", "Kazincbarcika", "Kecel", "Kecskemét", "Kemecse", "Kenderes", "Kerekegyháza", "Kerepes", "Keszthely", "Kisbér", "Kisköre", "Kiskőrös", "Kiskunfélegyháza", "Kiskunhalas", "Kiskunmajsa", "Kistarcsa", "Kistelek", "Kisújszállás", "Kisvárda", "Komádi", "Komárom", "Komló", "Kondoros", "Kozármisleny", "Körmend", "Körösladány", "Kőszeg", "Kunhegyes", "Kunszentmárton", "Kunszentmiklós", "Lábatlan", "Lajosmizse", "Lébény", "Lengyeltóti", "Lenti", "Létavértes", "Letenye", "Lőrinci", "Maglód", "Mágocs", "Makó", "Mándok", "Marcali", "Máriapócs", "Martfű", "Martonvásár", "Mátészalka", "Medgyesegyháza", "Mélykút", "Mezőberény", "Mezőcsát", "Mezőhegyes", "Mezőkeresztes", "Mezőkovácsháza", "Mezőkövesd", "Mezőtúr", "Mindszent", "Miskolc", "Mohács", "Monor", "Mór", "Mórahalom", "Mosonmagyaróvár", "Nádudvar", "Nagyatád", "Nagybajom", "Nagyecsed", "Nagyhalász", "Nagykálló", "Nagykanizsa", "Nagykáta", "Nagykőrös", "Nagymányok", "Nagymaros", "Nyékládháza", "Nyergesújfalu", "Nyíradony", "Nyírbátor", "Nyíregyháza", "Nyírlugos", "Nyírmada", "Nyírtelek", "Ócsa", "Onga", "Orosháza", "Oroszlány", "Ózd", "Őrbottyán", "Őriszentpéter", "Örkény", "Pacsa", "Paks", "Pálháza", "Pannonhalma", "Pápa", "Pásztó", "Pécel", "Pécs", "Pécsvárad", "Pétervására", "Pilis", "Piliscsaba", "Pilisvörösvár", "Polgár", "Polgárdi", "Pomáz", "Pusztaszabolcs", "Putnok", "Püspökladány", "Rácalmás", "Ráckeve", "Rakamaz", "Rákóczifalva", "Répcelak", "Rétság", "Rudabánya", "Sajóbábony", "Sajószentpéter", "Salgótarján", "Sándorfalva", "Sárbogárd", "Sarkad", "Sárospatak", "Sárvár", "Sásd", "Sátoraljaújhely", "Sellye", "Siklós", "Simontornya", "Siófok", "Solt", "Soltvadkert", "Sopron", "Sülysáp", "Sümeg", "Szabadszállás", "Szarvas", "Százhalombatta", "Szécsény", "Szeged", "Szeghalom", "Székesfehérvár", "Szekszárd", "Szendrő", "Szentendre", "Szentes", "Szentgotthárd", "Szentlőrinc", "Szerencs", "Szigethalom", "Szigetszentmiklós", "Szigetvár", "Szikszó", "Szob", "Szolnok", "Szombathely", "Tab", "Tamási", "Tápiószele", "Tapolca", "Tát", "Tata", "Tatabánya", "Téglás", "Tét", "Tiszacsege", "Tiszaföldvár", "Tiszafüred", "Tiszakécske", "Tiszalök", "Tiszaújváros", "Tiszavasvári", "Tokaj", "Tolna", "Tompa", "Tótkomlós", "Tököl", "Törökbálint", "Törökszentmiklós", "Tura", "Túrkeve", "Újfehértó", "Újhartyán", "Újkígyós", "Újszász", "Üllő", "Vác", "Vaja", "Vámospércs", "Várpalota", "Vásárosnamény", "Vasvár", "Vecsés", "Velence", "Vép", "Veresegyház", "Verpelét", "Veszprém", "Vésztő", "Villány", "Visegrád", "Záhony", "Zalaegerszeg", "Zalakaros", "Zalalövő", "Zalaszentgrót", "Zamárdi", "Zirc", "Zsámbék"];
+
+  var sel = document.getElementById('cities');
+  var fragment = document.createDocumentFragment();
+  cities.forEach(function (city, index) {
+    var opt = document.createElement('option');
+    opt.innerHTML = city;
+    opt.value = city;
+    fragment.appendChild(opt);
+  });
+  sel.appendChild(fragment);
+
+  {% if form and form['cities']%}
+    $('#cities').val('{{form['cities']}}');
+  {% endif %}
+</script>
+<script src="../static/js/bootstrap.js"></script>
+<script src="../static/js/holder.js"></script>
+<script src="../static/js/popper.js"></script>
+</html>

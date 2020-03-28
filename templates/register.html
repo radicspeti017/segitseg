@@ -1,0 +1,148 @@
+<html lang="en">
+	<head>
+    <meta charset="utf-8">
+	<link rel="icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/css/app.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Segítség.info">
+    <link rel="apple-touch-icon" href="/logo192.png">
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="./manifest.json">
+    <!--
+      Notice the use of  in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>Segítség.info</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script>
+			$( document ).ready(function() {
+				var helpTypes = []
+				{% if form and form['helpTypes']%}
+					{% for value in form.getlist('helpTypes') %}
+						helpTypes.push("{{value}}");
+					{% endfor %}
+				{% endif %}
+				$.ajax({
+						url: "/rest/helpTypesOnkentes", success: function (result) {
+							$.each(result, function(key, name){
+										//Use the Option() constructor to create a new HTMLOptionElement.
+										var option = new Option(name["_id"], name["_id"], helpTypes.includes(name["_id"]), helpTypes.includes(name["_id"]));
+										//Convert the HTMLOptionElement into a JQuery object that can be used with the append method.
+										$(option).html(name["name"]);
+										//Append the option to our Select element.
+										$("#helpTypes").append(option);
+										console.log("Valami: " + helpTypes.includes(name["_id"]));
+								});
+						}
+				});
+
+				{% if form and form['cities']%}
+					$('#cities').val('{{form['cities']}}');
+				{% endif %}
+		  });
+		</script>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+		{% include "header.html" ignore missing %}
+
+    <div id="root">
+		<div class="jumbotron jumbotron-fluid">
+			<div class="center">
+				<div class="col-sm-12">
+					<div>
+						<h2>Regisztráció</h2>
+						<p>a regisztrációban a telefonszám megadása azért szükséges, mert a rendszer automatikus SMS-t küld.
+							Ezáltal ellenőrizzük, hogy aki regisztrál nem fiktív felhasználó. Ez semmiféle költséget nem okoz Önnek.</p>
+						<form action='register' method='POST'>
+							<div class="form-group">
+								<label>Email:</label>
+								<input type="email" name="email" class="form-control" value="{% if form %}{{form['email']}}{% endif %}" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;">
+							</div>
+							<div class="form-group">
+								<label>Név:</label>
+								<input type="text" name="name" class="form-control" value="{% if form %}{{form['name']}}{% endif %}">
+							</div>
+							<div class="form-group">
+								<label>Jelszó:</label>
+								<input type="password" name="password" class="form-control" value="{% if form %}{{form['password']}}{% endif %}" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACIUlEQVQ4EX2TOYhTURSG87IMihDsjGghBhFBmHFDHLWwSqcikk4RRKJgk0KL7C8bMpWpZtIqNkEUl1ZCgs0wOo0SxiLMDApWlgOPrH7/5b2QkYwX7jvn/uc//zl3edZ4PPbNGvF4fC4ajR5VrNvt/mo0Gr1ZPOtfgWw2e9Lv9+chX7cs64CS4Oxg3o9GI7tUKv0Q5o1dAiTfCgQCLwnOkfQOu+oSLyJ2A783HA7vIPLGxX0TgVwud4HKn0nc7Pf7N6vV6oZHkkX8FPG3uMfgXC0Wi2vCg/poUKGGcagQI3k7k8mcp5slcGswGDwpl8tfwGJg3xB6Dvey8vz6oH4C3iXcFYjbwiDeo1KafafkC3NjK7iL5ESFGQEUF7Sg+ifZdDp9GnMF/KGmfBdT2HCwZ7TwtrBPC7rQaav6Iv48rqZwg+F+p8hOMBj0IbxfMdMBrW5pAVGV/ztINByENkU0t5BIJEKRSOQ3Aj+Z57iFs1R5NK3EQS6HQqF1zmQdzpFWq3W42WwOTAf1er1PF2USFlC+qxMvFAr3HcexWX+QX6lUvsKpkTyPSEXJkw6MQ4S38Ljdbi8rmM/nY+CvgNcQqdH6U/xrYK9t244jZv6ByUOSiDdIfgBZ12U6dHEHu9TpdIr8F0OP692CtzaW/a6y3y0Wx5kbFHvGuXzkgf0xhKnPzA4UTyaTB8Ph8AvcHi3fnsrZ7Wore02YViqVOrRXXPhfqP8j6MYlawoAAAAASUVORK5CYII=&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
+							</div>
+							<div class="form-check">
+								<input id="tavsegitseg" type="checkbox" name="tavsegitseg" class="form-check-input" {% if form and form['tavsegitseg'] == 'on' %} checked="true" {% endif %}>
+								<label class="form-check-label"  for="tavsegitseg">Távsegítséget bárhonnan vállalok telefonon</label>
+							</div>
+							<div class="form-group">
+								<label>Egyéb segítséget itt tudok vállalni:</label>
+                <select id="cities" name="cities" class="form-control" value="{% if form %}{{form['cities']}}{% endif %}">
+                </select>
+							</div>
+							<div class="form-group">
+								<label>Telefonszám (SMS megerősítéshez, +36 formátum):</label>
+								<input type="text" name="phone" class="form-control" value="{% if form %}{{form['phone']}}{% endif %}" >
+							</div>
+							<div class="form-group">
+								<label>Segítség jellege (több is megadható, CTRL gomb):</label>
+								<select size="10" id="helpTypes" name="helpTypes" class="form-control" multiple value="{% if form %}{{form['helpTypes']}}{% endif %}">
+								  <option value="" disabled selected>Válassza ki miben tud segíteni</option>
+								</select>
+              </div>
+							{% if error is defined and error != None %}
+							<div class="alert alert-danger" role="alert">
+							  <h4 class="alert-heading">Hiba történt!</h4>
+							  <p>{{error}}</p>
+							</div>
+              {% endif %}
+
+              <div class="container">
+                <input type="submit" value="Regisztráció" class="btn btn-primary"></input>
+              </div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+
+
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  <script>
+    var cities = ["Budapest I. kerülete","Budapest II. kerülete","Budapest III. kerülete","Budapest IV. kerülete","Budapest V. kerülete","Budapest VI. kerülete","Budapest VII. kerülete","Budapest VIII. kerülete","Budapest IX. kerülete","Budapest X. kerülete","Budapest XI. kerülete","Budapest XII. kerülete","Budapest XIII. kerülete","Budapest XIV. kerülete","Budapest XV. kerülete","Budapest XVI. kerülete","Budapest XVII. kerülete","Budapest XVIII. kerülete","Budapest XIX. kerülete","Budapest XX. kerülete","Budapest XXI. kerülete", "Budapest XXII. kerülete", "Budapest XXIII. kerülete", "Aba", "Abádszalók", "Abaújszántó", "Abony", "Ács", "Adony", "Ajak", "Ajka", "Albertirsa", "Alsózsolca", "Aszód", "Bábolna", "Bácsalmás", "Badacsonytomaj", "Baja", "Baktalórántháza", "Balassagyarmat", "Balatonalmádi", "Balatonboglár", "Balatonföldvár", "Balatonfüred", "Balatonfűzfő", "Balatonkenese", "Balatonlelle", "Balkány", "Balmazújváros", "Barcs", "Bátaszék", "Bátonyterenye", "Battonya", "Békés", "Békéscsaba", "Bélapátfalva", "Beled", "Berettyóújfalu", "Berhida", "Besenyszög", "Biatorbágy", "Bicske", "Biharkeresztes", "Bodajk", "Bóly", "Bonyhád", "Borsodnádasd", "Budakalász", "Budakeszi", "Budaörs", "Bük", "Cegléd", "Celldömölk", "Cigánd", "Csákvár", "Csanádpalota", "Csenger", "Csepreg", "Csongrád", "Csorna", "Csorvás", "Csurgó", "Dabas", "Debrecen", "Demecser", "Derecske", "Dévaványa", "Devecser", "Diósd", "Dombóvár", "Dombrád", "Dorog", "Dunaföldvár", "Dunaharaszti", "Dunakeszi", "Dunaújváros", "Dunavarsány", "Dunavecse", "Edelény", "Eger", "Elek", "Emőd", "Encs", "Enying", "Ercsi", "Érd", "Esztergom", "Fegyvernek", "Fehérgyarmat", "Felsőzsolca", "Fertőd", "Fertőszentmiklós", "Fonyód", "Fót", "Füzesabony", "Füzesgyarmat", "Gárdony", "Göd", "Gödöllő", "Gönc", "Gyál", "Gyomaendrőd", "Gyömrő", "Gyöngyös", "Gyöngyöspata", "Gyönk", "Győr", "Gyula", "Hajdúböszörmény", "Hajdúdorog", "Hajdúhadház", "Hajdúnánás", "Hajdúsámson", "Hajdúszoboszló", "Hajós", "Halásztelek", "Harkány", "Hatvan", "Herend", "Heves", "Hévíz", "Hódmezővásárhely", "Ibrány", "Igal", "Isaszeg", "Izsák", "Jánoshalma", "Jánosháza", "Jánossomorja", "Jászapáti", "Jászárokszállás", "Jászberény", "Jászfényszaru", "Jászkisér", "Kaba", "Kadarkút", "Kalocsa", "Kaposvár", "Kapuvár", "Karcag", "Kazincbarcika", "Kecel", "Kecskemét", "Kemecse", "Kenderes", "Kerekegyháza", "Kerepes", "Keszthely", "Kisbér", "Kisköre", "Kiskőrös", "Kiskunfélegyháza", "Kiskunhalas", "Kiskunmajsa", "Kistarcsa", "Kistelek", "Kisújszállás", "Kisvárda", "Komádi", "Komárom", "Komló", "Kondoros", "Kozármisleny", "Körmend", "Körösladány", "Kőszeg", "Kunhegyes", "Kunszentmárton", "Kunszentmiklós", "Lábatlan", "Lajosmizse", "Lébény", "Lengyeltóti", "Lenti", "Létavértes", "Letenye", "Lőrinci", "Maglód", "Mágocs", "Makó", "Mándok", "Marcali", "Máriapócs", "Martfű", "Martonvásár", "Mátészalka", "Medgyesegyháza", "Mélykút", "Mezőberény", "Mezőcsát", "Mezőhegyes", "Mezőkeresztes", "Mezőkovácsháza", "Mezőkövesd", "Mezőtúr", "Mindszent", "Miskolc", "Mohács", "Monor", "Mór", "Mórahalom", "Mosonmagyaróvár", "Nádudvar", "Nagyatád", "Nagybajom", "Nagyecsed", "Nagyhalász", "Nagykálló", "Nagykanizsa", "Nagykáta", "Nagykőrös", "Nagymányok", "Nagymaros", "Nyékládháza", "Nyergesújfalu", "Nyíradony", "Nyírbátor", "Nyíregyháza", "Nyírlugos", "Nyírmada", "Nyírtelek", "Ócsa", "Onga", "Orosháza", "Oroszlány", "Ózd", "Őrbottyán", "Őriszentpéter", "Örkény", "Pacsa", "Paks", "Pálháza", "Pannonhalma", "Pápa", "Pásztó", "Pécel", "Pécs", "Pécsvárad", "Pétervására", "Pilis", "Piliscsaba", "Pilisvörösvár", "Polgár", "Polgárdi", "Pomáz", "Pusztaszabolcs", "Putnok", "Püspökladány", "Rácalmás", "Ráckeve", "Rakamaz", "Rákóczifalva", "Répcelak", "Rétság", "Rudabánya", "Sajóbábony", "Sajószentpéter", "Salgótarján", "Sándorfalva", "Sárbogárd", "Sarkad", "Sárospatak", "Sárvár", "Sásd", "Sátoraljaújhely", "Sellye", "Siklós", "Simontornya", "Siófok", "Solt", "Soltvadkert", "Sopron", "Sülysáp", "Sümeg", "Szabadszállás", "Szarvas", "Százhalombatta", "Szécsény", "Szeged", "Szeghalom", "Székesfehérvár", "Szekszárd", "Szendrő", "Szentendre", "Szentes", "Szentgotthárd", "Szentlőrinc", "Szerencs", "Szigethalom", "Szigetszentmiklós", "Szigetvár", "Szikszó", "Szob", "Szolnok", "Szombathely", "Tab", "Tamási", "Tápiószele", "Tapolca", "Tát", "Tata", "Tatabánya", "Téglás", "Tét", "Tiszacsege", "Tiszaföldvár", "Tiszafüred", "Tiszakécske", "Tiszalök", "Tiszaújváros", "Tiszavasvári", "Tokaj", "Tolna", "Tompa", "Tótkomlós", "Tököl", "Törökbálint", "Törökszentmiklós", "Tura", "Túrkeve", "Újfehértó", "Újhartyán", "Újkígyós", "Újszász", "Üllő", "Vác", "Vaja", "Vámospércs", "Várpalota", "Vásárosnamény", "Vasvár", "Vecsés", "Velence", "Vép", "Veresegyház", "Verpelét", "Veszprém", "Vésztő", "Villány", "Visegrád", "Záhony", "Zalaegerszeg", "Zalakaros", "Zalalövő", "Zalaszentgrót", "Zamárdi", "Zirc", "Zsámbék"];
+
+    var sel = document.getElementById('cities');
+    var fragment = document.createDocumentFragment();
+    cities.forEach(function (city, index) {
+      var opt = document.createElement('option');
+      opt.innerHTML = city;
+      opt.value = city;
+      fragment.appendChild(opt);
+    });
+    sel.appendChild(fragment);
+  </script>
+
+</body>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/holder.js"></script>
+<script src="/static/js/popper.js"></script>
+</html>

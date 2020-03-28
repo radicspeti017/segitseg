@@ -1,0 +1,73 @@
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <link rel="icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+      <link rel="stylesheet" type="text/css" href="/static/css/app.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="theme-color" content="#000000">
+      <meta name="description" content="Segítség.info">
+    <link rel="apple-touch-icon" href="/logo192.png">
+    <!--
+        manifest.json provides metadata used when your web app is installed on a
+        user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+      -->
+    <link rel="manifest" href="./manifest.json">
+    <!--
+        Notice the use of  in the tags above.
+        It will be replaced with the URL of the `public` folder during the build.
+        Only files inside the `public` folder can be referenced from the HTML.
+
+        Unlike "/favicon.ico" or "favicon.ico", "/favicon.ico" will
+        work correctly both with client-side routing and a non-root public URL.
+        Learn how to configure a non-root public URL by running `npm run build`.
+      -->
+    <title>Ellenőrző kód</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    {% include "header.html" ignore missing %}
+
+    <div id="root">
+		<div class="jumbotron jumbotron-fluid">
+        <div class="center">
+          <div class="col-sm-12">
+            <div>
+              <h2>Ellenőrző kód</h2>
+              <p>kérem adja meg az SMS-ben kapott ellenőrző kódot</p>
+              <form name="form" action='code' method='POST'>
+              <div class="form-group">
+                <label>Kód:</label>
+                <input type="text"
+                  name="code"
+                  class="form-control"
+                  value=""
+                  style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAYJJREFUOBGVVLuKwkAUPRFRY2GlhRKDVRpBMFgJgRQ2C37HCvmCdOpnuE0qWzvZBf8hTbC2SLAKqQQfTXbumAy6xE0cmMx9nHNm5t4h0nK5/IjjeMVmFwWGJEk+g30uFosfgpfeIRMh2eiLbBokUGjnO/z+feSUHhN5dr1eh6ZpT7C3BHq9HiaTSbZArVYTiWq1ClYs4T/mRDAxyrROp1Pouo71eo0oimBZFo7HIxzHecr9JZP/1hWyBKT5fB5Tgo55uVw4hq5wvV6z8CLGrhgwZyZOkJIJkUcmDGulwpYVrwEF8oZhGOj3+2g2m7xWh8OBi4gT/CcwHo9hmiZ838d2u+WFTvGl5G2nfuY6Go04WZZlqKqK2+0mcCQwyxNpNBpQFAWVSgXD4RCDwUAIlFkXvpmnikhipN0h93w+43Q6YbPZwLZtdDodAS9UA8/z0G63+QMjJhUwHS+7QH1OWoXdbocwDNFqtRAEAfb7PecT5qUAQ1Bt6EejsAnXddNNBZkwv/3KjSrHve9/AAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;"
+                  autocomplete="off">
+              </div>
+
+              {% if error is defined and error != None %}
+							<div class="alert alert-danger" role="alert">
+							  <h4 class="alert-heading">Hiba történt!</h4>
+							  <p>{{error}}</p>
+							</div>
+              {% endif %}
+
+              <div class="container">
+                <input type="submit" name="submit_button" value="Jóváhagyás" class="btn btn-primary"></input>
+                <input type="submit" name="resend_button" value="Új SMS kód küldése" class="btn btn-secondary"></input>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="/static/js/bootstrap.js"></script>
+  <script src="/static/js/holder.js"></script>
+  <script src="/static/js/popper.js"></script>
+</html>

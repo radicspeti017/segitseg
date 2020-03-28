@@ -1,0 +1,226 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/static/css/app.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/album.css">
+    <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Segítség.info">
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="/static/manifest.json">
+    <title>Segítség.info</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBr1NGqRovhtOS3jOZ0n9mz2at8wn_kHps"></script>
+
+    <script>
+      function elonyokClick() {
+          if (document.getElementById("elonyok").style.display === "none") {
+            document.getElementById("elonyok").style.display = "block";
+            document.getElementById('elonyokButton').scrollIntoView();
+          } else {
+            document.getElementById("elonyok").style.display = "none";
+          }
+        }
+
+        function startGeocoding() {
+
+          navigator.geolocation.getCurrentPosition(geocodePosition);
+        }
+
+        function geocodePosition(position) {
+          var geocoder = new google.maps.Geocoder;
+
+
+          var latlng = {lat: position.coords.latitude, lng: position.coords.longitude};
+          geocoder.geocode({'location': latlng}, function(results, status) {
+            if (status === 'OK') {
+              if (results[0]) {
+                console.log(results[0])
+                size = results[0]['address_components'].length
+                city = results[0]['address_components'][size-3]['long_name']
+                district = results[0]['address_components'][size-4]['long_name']
+
+                c = city
+                if (city == 'Budapest') {
+                  c = city + ' ' + district + 'e';
+                }
+                $('#onkormTelepules').html("<h4>A helymeghatározás szerint az Ön települése: " + c + "</h4>");
+
+                $.ajax({
+                    url: "/onkormanyzat?city=" + c, success: function (result) {
+
+                      $('#onkormTelDefault').css('display','none');
+                      $('#onkormWebDefault').css('display','none');
+                      var found = false;
+                      if ('telefon' in result && result['telefon'] != null) {
+                        $('#onkormTel').html('<a href=\"tel:' + result['telefon'] + '\">' + result['telefon'] + '</a>');
+                        $('#onkormTelPanel').css('display','block');
+                        found = true;
+                      } else {
+                        $('#onkormTelPanel').css('display','none');
+                      }
+
+                      if ('email' in result && result['email'] != null) {
+                        $('#onkormEmail').html('<a href=\"mailto:' + result['email'] + '\">' + result['email'] + '</a>');
+                        $('#onkormEmailPanel').css('display','block');
+                      } else {
+                        $('#onkormEmailPanel').css('display','none');
+                      }
+
+                      if (!found) {
+                        $('#onkormTelDefault').css('display','block');
+                        $('#onkormWebDefault').css('display','block');
+                      }
+
+                      $('#hivomDialog').modal()
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                      alert("Hiba történt, nem sikerült a helymeghatározás");
+                    }
+                });
+
+              } else {
+                window.alert('Hiba történt, nem sikerült a helymeghatározás');
+              }
+            } else {
+              window.alert('Hiba történt, nem sikerült a helymeghatározás');
+            }
+          });
+        }
+
+    </script>
+
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    {% include "header.html" ignore missing %}
+    <div id="root">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container info">
+
+
+          <!-- Modal -->
+          <div class="modal fade bd-example-modal-lg" id="hivomDialog" tabindex="-1" role="dialog" aria-labelledby="hivomDialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Önkormányzat elérhetősége:</h5>
+                </div>
+                <div class="modal-body">
+                  <h4 id="onkormTelepules"></h4>
+
+                  <div id="onkormTelPanel" class="alert alert-info" role="alert">
+                    <h4>Kérjük hívja az alábbi telefonszámot:</h4>
+                    <h2 id="onkormTel"></h2>
+                  </div>
+
+                  <div id="onkormEmailPanel" class="alert alert-info" role="alert">
+                    <h4>Továbbá emailen:</h4>
+                    <h5 id="onkormEmail"></h5>
+                  </div>
+
+                  <div id="onkormTelDefault" class="alert alert-info" role="alert">
+                    <h4>Jelnleg nem található a rendszerünkben az önkormányzat közvetlen telefonszáma.
+                      Kérjük hívja az alábbi központi számot:</h4>
+                      <h2><a href="tel:+36 80 277 455">+36 80 277 455</a></h2>
+                      <h2><a href="tel:+36 80 277 456">+36 80 277 456</a></h2>
+                  </div>
+
+                  <div id="onkormWebDefault" class="alert alert-info" role="alert">
+                    <h4>további információ:</h4>
+                      <a href="https://koronavirus.gov.hu/">https://koronavirus.gov.hu/</a>
+                  </div>
+
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-primary btn-block" data-dismiss="modal">Bezár</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <h2>Önkéntes segítő rendszer</h2>
+          <div class="container">
+            <button class="btn btn-danger btn-lg button text-center" onclick="window.location.href='./segitsetek'">Segítséget szeretnék kérni!</button>
+            <button class="btn btn-success btn-lg"  onclick="window.location.href='./login'">Segítséget szeretnék nyújtani!</button>
+          </div>
+          <hr>
+          <h2>70 év felettiek ellátása koronavírusos járvány időszakban:</h2>
+          <div class="container">
+            <button class="btn btn-danger btn-lg"  onclick="startGeocoding()">Önkormányzat hívása <br> helymeghatározás alapján!</button>
+            <p>46/2020. (III. 16.) Korm. rendelet alapján. Helymeghatározás engedélyezése szükséges a használathoz!</p>
+          </div>
+          <hr>
+          <div class="alert alert-primary" role="alert">
+            <h2>Segítségre van szüksége, vagy szívesen segítene másokon?</h2>
+            <h4>Rendszerünkben önkéntesek ingyen segítséget nyújthatnak, vagy tanácsot adhatnak az azt igénylő személyek részére.</h4>
+          </div>
+          <hr>
+          <div class="alert alert-danger" role="alert">
+            Oldalunknak a koronavírus adott aktualitást. A járvány miatt kialakult helyzetben még inkább szükség van az önkéntes és önzetlen emberekre.
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-md-6">
+              <h4>
+                Mindenki gyakran került már
+              </h4>
+              <p>
+                olyan helyzetbe, hogy apróbb segítségre volt szüksége, de közeli rokonai, ismerősei nem
+                értek rá vagy nem volt lehetőségük a segítségnyújtásra. Mindenkivel gyakran történt már meg, hogy egy hétköznapi
+                szituációban elbizonytalanodott, és csak egy kisebb tanácsra lett volna szüksége, hogy folytatni tudja a munkáját,
+                teendőjét.
+              </p>
+            </div>
+            <div class="col-md-6">
+              <h4>
+                Néha egy apró segítség,
+              </h4>
+              <p>
+                rövid tanács hihetetlenül meg tudja könnyíteni az ember hétköznapjait. Azonban
+                anyagias világunkban ritka az önzetlenség. Ezen szeretnénk változtatni! Rendszerünk automatikusan párosítja a segítségre
+                szorulókat a segítséget nyújtókkal.
+              </p>
+            </div>
+          </div>
+          <p class="justify-text">  </p>
+          <hr>
+          <div class="alert alert-danger" role="alert">
+          <h4>V&aacute;rjuk az al&aacute;bbi szervezetek jelentkez&eacute;s&eacute;t, hogy integr&aacute;lhassuk &#337;ket rendszer&uuml;nkbe: &Ouml;nkorm&aacute;nyzatok, Seg&iacute;t&#337; szervezetek, Hospice alap&iacute;tv&aacute;nyok, Egy&eacute;b &ouml;nszervez&#337;d&#337; seg&iacute;t&#337; csoportok</h4>
+          </div>
+          <hr>
+          <button id="elonyokButton" type="button" class="btn btn-secondary" onclick="elonyokClick()">Kezdeményezésünk előnyei</button>
+          <div id="elonyok" style="display: none";>
+            <ul>
+              <li>Egyszerű és gyors kapcsolatteremtés.</li>
+              <li>Ingyenes, önkéntességen alapul.</li>
+              <li>Biztonság: a segítséget nyújtó fél csak előzetes regisztrációval kerülhet be a rendszerünkbe. Telefonszámát validálnia
+            kell.</li>
+              <li>Automatizált programok segítik a párosítást.</li>
+              <li>Csapatunk képzett informatikusokból és számos egyéb végzettségű elkötelezett emberekből áll, mely lehetővé teszi
+            rendszerünk folyamatos fejlesztését.</li>
+              <li>A segítségnyújtási és tanácsadási lehetőségek az élet számos területére kiterjednek.</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+
+  </body>
+  <script src="../static/js/bootstrap.js"></script>
+  <script src="../static/js/holder.js"></script>
+  <script src="../static/js/popper.js"></script>
+</html>

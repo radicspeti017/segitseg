@@ -1,0 +1,68 @@
+<html>
+<head>
+  <link rel="icon" href="/static/images/favicon.ico">
+  <link rel="stylesheet" type="text/css" href="/static/css/app.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/album.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Segítség.info">
+</head>
+<body>
+  {% include "header.html" ignore missing %}
+
+  <div class="jumbotron">
+{% if helpType['type'] == 'onkorm' %}
+  <h4>Az Ön által kért segítség a Kormány 46/2020. (III. 16.) rendelete alapján a helyi önkormányzat hatáskörébe tartozik.</h4>
+
+  {% if (city['telefon'] != None or city['email'] != None) %}
+
+
+    {% if (city['telefon'] != None) %}
+      <div class="alert alert-info" role="alert">
+        <h4>Kérjük hívja az alábbi telefonszámot:</h4>
+        <h2><a href="tel:{{city['telefon']}}">{{city['telefon']}}</a></h2>
+      </div>
+    {% endif %}
+
+    {% if (city['email'] != None) %}
+    <div class="alert alert-info" role="alert">
+      <h4>Továbbá emailen:</h4>
+      <h4>{{city['email']}}</h4>
+    </div>
+    {% endif %}
+
+  {% else %}
+
+
+  <div class="alert alert-info" role="alert">
+    <h4>Jelnleg nem található a rendszerünkben az önkormányzat közvetlen telefonszáma.
+      Kérjük hívja az alábbi központi számot:</h4>
+      <h2><a href="tel:+36 80 277 455">+36 80 277 455</a></h2>
+      <h2><a href="tel:+36 80 277 456">+36 80 277 456</a></h2>
+  </div>
+
+  <div class="alert alert-info" role="alert">
+    <h4>további információ:</h4>
+      <a href="https://koronavirus.gov.hu/">https://koronavirus.gov.hu/</a>
+  </div>
+
+  {% endif %}
+
+{% else %}
+  <h2>Önkénteseink hamarosan felkeresik Önt.</h2> <h2>Köszönjük bizalmát!</h2>
+
+{% endif %}
+
+
+
+  <button class="btn btn btn-outline-primary" onclick="window.location.href='./segitsetek'">Ismét segítséget kérek</button>
+</div>
+</body>
+<script src="../static/js/bootstrap.js"></script>
+<script src="../static/js/holder.js"></script>
+<script src="../static/js/jquery-3.js"></script>
+<script src="../static/js/popper.js"></script>
+</html>

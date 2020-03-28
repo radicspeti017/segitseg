@@ -1,0 +1,77 @@
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <link rel="icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/static/css/app.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/album.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Segítség.info">
+    <script src="//cdn.bootcss.com/jquery/2.1.0/jquery.js"></script>
+    <!--
+        manifest.json provides metadata used when your web app is installed on a
+        user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+      -->
+    <link rel="manifest" href="./manifest.json">
+    <!--
+        Notice the use of  in the tags above.
+        It will be replaced with the URL of the `public` folder during the build.
+        Only files inside the `public` folder can be referenced from the HTML.
+
+        Unlike "/favicon.ico" or "favicon.ico", "/favicon.ico" will
+        work correctly both with client-side routing and a non-root public URL.
+        Learn how to configure a non-root public URL by running `npm run build`.
+      -->
+    <title>Segítség.info</title>
+  </head>
+  <body>
+    {% include "header.html" ignore missing %}
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      <div class="jumbotron">
+        <div class="center">
+          <div class="col-sm-12">
+            <div>
+              <h2>Belépés</h2>
+              <form name="form" action='login' method='POST'>
+              <div class="form-group">
+                <label>Email:</label>
+                <input type="email"
+                  name="email"
+                  class="form-control"
+                  value="{% if form %}{{form['email']}}{% endif %}"
+                  style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAYJJREFUOBGVVLuKwkAUPRFRY2GlhRKDVRpBMFgJgRQ2C37HCvmCdOpnuE0qWzvZBf8hTbC2SLAKqQQfTXbumAy6xE0cmMx9nHNm5t4h0nK5/IjjeMVmFwWGJEk+g30uFosfgpfeIRMh2eiLbBokUGjnO/z+feSUHhN5dr1eh6ZpT7C3BHq9HiaTSbZArVYTiWq1ClYs4T/mRDAxyrROp1Pouo71eo0oimBZFo7HIxzHecr9JZP/1hWyBKT5fB5Tgo55uVw4hq5wvV6z8CLGrhgwZyZOkJIJkUcmDGulwpYVrwEF8oZhGOj3+2g2m7xWh8OBi4gT/CcwHo9hmiZ838d2u+WFTvGl5G2nfuY6Go04WZZlqKqK2+0mcCQwyxNpNBpQFAWVSgXD4RCDwUAIlFkXvpmnikhipN0h93w+43Q6YbPZwLZtdDodAS9UA8/z0G63+QMjJhUwHS+7QH1OWoXdbocwDNFqtRAEAfb7PecT5qUAQ1Bt6EejsAnXddNNBZkwv/3KjSrHve9/AAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;"
+                  autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label>Jelszó:</label>
+                <input type="password"
+                  name="password"
+                  class="form-control"
+                  value=""
+                  style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAYJJREFUOBGVVLuKwkAUPRFRY2GlhRKDVRpBMFgJgRQ2C37HCvmCdOpnuE0qWzvZBf8hTbC2SLAKqQQfTXbumAy6xE0cmMx9nHNm5t4h0nK5/IjjeMVmFwWGJEk+g30uFosfgpfeIRMh2eiLbBokUGjnO/z+feSUHhN5dr1eh6ZpT7C3BHq9HiaTSbZArVYTiWq1ClYs4T/mRDAxyrROp1Pouo71eo0oimBZFo7HIxzHecr9JZP/1hWyBKT5fB5Tgo55uVw4hq5wvV6z8CLGrhgwZyZOkJIJkUcmDGulwpYVrwEF8oZhGOj3+2g2m7xWh8OBi4gT/CcwHo9hmiZ838d2u+WFTvGl5G2nfuY6Go04WZZlqKqK2+0mcCQwyxNpNBpQFAWVSgXD4RCDwUAIlFkXvpmnikhipN0h93w+43Q6YbPZwLZtdDodAS9UA8/z0G63+QMjJhUwHS+7QH1OWoXdbocwDNFqtRAEAfb7PecT5qUAQ1Bt6EejsAnXddNNBZkwv/3KjSrHve9/AAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;"
+                  autocomplete="off">
+              </div>
+              {% if error is defined and error != None %}
+							<div class="alert alert-danger" role="alert">
+							  <h4 class="alert-heading">Hiba történt!</h4>
+							  <p>{{error}}</p>
+							</div>
+              {% endif %}
+              <div class="container">
+                <input type="submit" value="Belépés" class="btn btn-primary"></input><a class="btn btn-link" href="./register">Regisztráció</a>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="../static/js/bootstrap.js"></script>
+  <script src="../static/js/holder.js"></script>
+  <script src="../static/js/jquery-3.js"></script>
+  <script src="../static/js/popper.js"></script>
+</html>
